@@ -6,8 +6,10 @@ import * as bigInt from 'big-integer'
 let tx0 = JSON.parse(fs.readFileSync('../../user/transactions/tx0.json'));  
 
 let tx = tx0.tx
-let from = tx.from
-let to = tx.to
+let from = Buffer.from(tx.from.data)
+console.log(from)
+let to = Buffer.from(tx.to.data)
+console.log(to)
 let nonce = tx.nonce
 let amount = tx.amount
 

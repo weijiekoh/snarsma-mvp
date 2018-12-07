@@ -76,8 +76,8 @@ const sig = signTx(unsignedTx, fromPrivKey)
 function makeJson(_unsignedTx, _sig, _A, fileName){
   var transaction = {
     tx: {
-      from: _unsignedTx.from.toString('hex'),
-      to: _unsignedTx.to.toString('hex'),
+      from: _unsignedTx.from,
+      to: _unsignedTx.to,
       amount: _unsignedTx.amount.toString(),
       nonce: _unsignedTx.nonce.toString()
     },
