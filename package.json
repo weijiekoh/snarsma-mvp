@@ -18,6 +18,7 @@
   "homepage": "https://github.com/weijiekoh/snarsma-mvp#readme",
   "dependencies": {
     "@types/node": "^10.12.12",
+    "big-integer": "^1.6.40",
     "circom": "0.0.22",
     "snarkjs": "^0.1.7"
   }
