@@ -19,6 +19,8 @@
   "dependencies": {
     "@types/node": "^10.12.12",
     "circom": "0.0.22",
-    "snarkjs": "^0.1.7"
+    "merkletreejs": "0.0.18",
+    "snarkjs": "^0.1.7",
+    "typescript": "^3.2.2"
   }
 }
