@@ -5,10 +5,12 @@ const babyJub = require('../../circomlib/src/babyjub')
 var fs = require("fs");
 
 const fromPrivKey = '0000000000000000000000000000000000000000000000000000000000000001';
-const fromPubKey = babyJub.packPoint(eddsa.prv2pub(fromPrivKey))
+const fromA = eddsa.prv2pub(fromPrivKey)
+const fromPubKey = babyJub.packPoint(fromA)
 
 const toPrivKey = '0000000000000000000000000000000000000000000000000000000000000002';
-const toPubKey = babyJub.packPoint(eddsa.prv2pub(toPrivKey))
+const toA = eddsa.prv2pub(toPrivKey)
+const toPubKey = babyJub.packPoint(toA)
 
 interface ITransaction {
   from: Buffer,
@@ -71,26 +73,34 @@ const signTx = (unsignedTx: ITransaction, privKey: string): any => {
 const sig = signTx(unsignedTx, fromPrivKey)
 
 //make JSON object
-var tx0 = {
-  tx: {
-    from: unsignedTx.from.toString('hex'),
-    to: unsignedTx.to.toString('hex'),
-    amount: unsignedTx.amount.toString(),
-    nonce: unsignedTx.nonce.toString()
-  },
-  sig: {
-    R8: sig.R8.toString(),
-    S: sig.S.toString()
-  }
-};
+function makeJson(_unsignedTx, _sig, _A, fileName){
+  var transaction = {
+    tx: {
+      from: _unsignedTx.from.toString('hex'),
+      to: _unsignedTx.to.toString('hex'),
+      amount: _unsignedTx.amount.toString(),
+      nonce: _unsignedTx.nonce.toString()
+    },
+    sig: {
+      R8: _sig.R8.toString(),
+      S: _sig.S.toString()
+    },
+    eddsaVerify: {
+      A: _A.toString(), 
+      msg: hashTx(unsignedTx)
+    }
+  };
 
-fs.writeFile("../../user/transactions/tx0.json", JSON.stringify(tx0), (err) => {
-    if (err) {
-        console.error(err);
-        return;
-    };
-    console.log("File has been created");
-});
+  fs.writeFile("../../user/transactions/"+fileName+".json", 
+               JSON.stringify(transaction), (err) => {
+      if (err) {
+          console.error(err);
+          return;
+      };
+      console.log("File has been created");
+  });
+}
 
+makeJson(unsignedTx,sig,fromA,'tx0')
 
 export {hashTx, signTx, ITransaction}
