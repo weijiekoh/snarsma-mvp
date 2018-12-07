@@ -84,7 +84,7 @@ var tx0 = {
   }
 };
 
-fs.writeFile("./tx0.json", JSON.stringify(tx0), (err) => {
+fs.writeFile("../../user/transactions/tx0.json", JSON.stringify(tx0), (err) => {
     if (err) {
         console.error(err);
         return;
