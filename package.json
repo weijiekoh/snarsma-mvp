@@ -1,0 +1,24 @@
+{
+  "name": "snarsma-mvp",
+  "version": "1.0.0",
+  "description": "Submission to ETHSingapore 2018",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weijiekoh/snarsma-mvp.git"
+  },
+  "author": "Benjamin Ong, Hitesh Joshi, Lai Ying Tong, Koh Wei Jie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/weijiekoh/snarsma-mvp/issues"
+  },
+  "homepage": "https://github.com/weijiekoh/snarsma-mvp#readme",
+  "dependencies": {
+    "@types/node": "^10.12.12",
+    "circom": "0.0.22",
+    "snarkjs": "^0.1.7"
+  }
+}
