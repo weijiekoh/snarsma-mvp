@@ -61,9 +61,9 @@ let unsignedTx: ITransaction = {
   nonce: bigInt(4)
 }
 
-const signTx = (unsignedTx: ITransaction): any => {
+const signTx = (unsignedTx: ITransaction, privKey: string): any => {
   const hashedTx = hashTx(unsignedTx)
-  const sig = eddsa.sign(fromPrivKey, hashedTx)
+  const sig = eddsa.sign(privKey, hashedTx)
 
   return sig
 }
