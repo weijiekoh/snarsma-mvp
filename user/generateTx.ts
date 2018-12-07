@@ -1,7 +1,7 @@
 import {hashBuf, numToBuf} from '../utils/hash'
 import * as bigInt from 'big-integer'
 const eddsa = require('../../circomlib/src/eddsa')
-// const babyJub = require('../../circomlib/src/babyjub')
+const babyJub = require('../../circomlib/src/babyjub')
 var fs = require("fs");
 
 interface ITransaction {
@@ -54,6 +54,14 @@ const signTx = (unsignedTx: ITransaction, privKey: string): any => {
   return sig
 }
 
+function A(privKey){
+  return eddsa.prv2pub(privKey)
+}
+
+function pubKey(A){
+  return babyJub.packPoint(A)
+}
+
 //make JSON object
 function makeJson(_unsignedTx, _sig, _A, fileName){
   var transaction = {
@@ -80,4 +88,4 @@ function makeJson(_unsignedTx, _sig, _A, fileName){
   });
 }
 
-export {hashTx, signTx, ITransaction, makeJson}
+export {hashTx, signTx, ITransaction, makeJson, A, pubKey}
