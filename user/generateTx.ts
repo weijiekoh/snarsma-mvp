@@ -45,10 +45,10 @@ const hashTx = (tx: any): Buffer => {
     everything[23-i] = fromPubKeyForHash[23-i]
   }
 
-  console.log(fromPubKeyForHash.toString('hex'))
-  console.log(toPubKeyForHash.toString('hex'))
-  console.log(nonceBytes.toString('hex'))
-  console.log(amtBytes.toString('hex'))
+  //console.log(fromPubKeyForHash.toString('hex'))
+  //console.log(toPubKeyForHash.toString('hex'))
+  //console.log(nonceBytes.toString('hex'))
+  //console.log(amtBytes.toString('hex'))
 
   return numToBuf(hashBuf(everything), 32)
 }
@@ -63,4 +63,5 @@ let unsignedTx: ITransaction = {
 
 const hashedTx = hashTx(unsignedTx)
 const sig = eddsa.sign(fromPrivKey, hashedTx)
-console.log(sig)
+
+export {hashTx}
