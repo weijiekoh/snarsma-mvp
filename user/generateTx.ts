@@ -2,6 +2,7 @@ import {hashBuf, numToBuf} from '../utils/hash'
 import * as bigInt from 'big-integer'
 const eddsa = require('../../circomlib/src/eddsa')
 const babyJub = require('../../circomlib/src/babyjub')
+var fs = require("fs");
 
 const fromPrivKey = '0000000000000000000000000000000000000000000000000000000000000001';
 const fromPubKey = babyJub.packPoint(eddsa.prv2pub(fromPrivKey))
@@ -45,10 +46,10 @@ const hashTx = (tx: any): Buffer => {
     everything[23-i] = fromPubKeyForHash[23-i]
   }
 
-  //console.log(fromPubKeyForHash.toString('hex'))
-  //console.log(toPubKeyForHash.toString('hex'))
-  //console.log(nonceBytes.toString('hex'))
-  //console.log(amtBytes.toString('hex'))
+  // console.log(fromPubKeyForHash.toString('hex'))
+  // console.log(toPubKeyForHash.toString('hex'))
+  // console.log(nonceBytes.toString('hex'))
+  // console.log(amtBytes.toString('hex'))
 
   return numToBuf(hashBuf(everything), 32)
 }
@@ -64,9 +65,32 @@ let unsignedTx: ITransaction = {
 const signTx = (unsignedTx: ITransaction, privKey: string): any => {
   const hashedTx = hashTx(unsignedTx)
   const sig = eddsa.sign(privKey, hashedTx)
-
   return sig
 }
+
+const sig = signTx(unsignedTx, fromPrivKey)
+
+//make JSON object
+var tx0 = {
+  tx: {
+    from: unsignedTx.from.toString('hex'),
+    to: unsignedTx.to.toString('hex'),
+    amount: unsignedTx.amount.toString(),
+    nonce: unsignedTx.nonce.toString()
+  },
+  sig: {
+    R8: sig.R8.toString(),
+    S: sig.S.toString()
+  }
+};
+
+fs.writeFile("./tx0.json", JSON.stringify(tx0), (err) => {
+    if (err) {
+        console.error(err);
+        return;
+    };
+    console.log("File has been created");
+});
 
 
 export {hashTx, signTx, ITransaction}

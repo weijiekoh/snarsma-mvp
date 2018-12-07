@@ -21,6 +21,7 @@
     "big-integer": "^1.6.40",
     "circom": "0.0.22",
     "merkletreejs": "0.0.18",
+    "npm": "^6.4.1",
     "snarkjs": "^0.1.7",
     "typescript": "^3.2.2"
   }
