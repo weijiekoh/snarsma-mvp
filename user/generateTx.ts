@@ -1,16 +1,8 @@
 import {hashBuf, numToBuf} from '../utils/hash'
 import * as bigInt from 'big-integer'
 const eddsa = require('../../circomlib/src/eddsa')
-const babyJub = require('../../circomlib/src/babyjub')
+// const babyJub = require('../../circomlib/src/babyjub')
 var fs = require("fs");
-
-const fromPrivKey = '0000000000000000000000000000000000000000000000000000000000000001';
-const fromA = eddsa.prv2pub(fromPrivKey)
-const fromPubKey = babyJub.packPoint(fromA)
-
-const toPrivKey = '0000000000000000000000000000000000000000000000000000000000000002';
-const toA = eddsa.prv2pub(toPrivKey)
-const toPubKey = babyJub.packPoint(toA)
 
 interface ITransaction {
   from: Buffer,
@@ -56,21 +48,11 @@ const hashTx = (tx: any): Buffer => {
   return numToBuf(hashBuf(everything), 32)
 }
 
-// tx to send eth from
-let unsignedTx: ITransaction = {
-  from: fromPubKey,
-  to: toPubKey,
-  amount: bigInt(10),
-  nonce: bigInt(4)
-}
-
 const signTx = (unsignedTx: ITransaction, privKey: string): any => {
   const hashedTx = hashTx(unsignedTx)
   const sig = eddsa.sign(privKey, hashedTx)
   return sig
 }
-
-const sig = signTx(unsignedTx, fromPrivKey)
 
 //make JSON object
 function makeJson(_unsignedTx, _sig, _A, fileName){
@@ -85,10 +67,7 @@ function makeJson(_unsignedTx, _sig, _A, fileName){
       R8: _sig.R8.toString(),
       S: _sig.S.toString()
     },
-    eddsaVerify: {
-      A: _A.toString(), 
-      msg: hashTx(unsignedTx)
-    }
+    A: _A.toString()
   };
 
   fs.writeFile("../../user/transactions/"+fileName+".json", 
@@ -101,6 +80,4 @@ function makeJson(_unsignedTx, _sig, _A, fileName){
   });
 }
 
-makeJson(unsignedTx,sig,fromA,'tx0')
-
-export {hashTx, signTx, ITransaction}
+export {hashTx, signTx, ITransaction, makeJson}
