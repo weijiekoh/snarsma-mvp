@@ -14,6 +14,7 @@ One significant motivation for picking this challenge was that the `circomlib` a
 Ultimately, we did not complete a functioning demo, but implemented the following components:
 
 - off-chain Merkle proof generation and validation
+- off-chain database which stores transactions and serves queries from an operator
 - a zk-snark circuit that validates signed sidechain transactions
 
 The piece whose implementation time and energy cost we had underestimated the most was the zk-snark circuit for validating a Merkle proof.
