@@ -16,7 +16,7 @@ template Snarsma(n) {
     // wire up each 'sub'-signal using a loop
     var i; var j; var k; var m; var ni;
 
-    /********************************************/
+    /********************************************
     component eddsaVerifiers[n];
     for (ni=0; ni<n; ni++){
         eddsaVerifiers[ni] = EdDSAVerifier(560);
@@ -38,9 +38,8 @@ template Snarsma(n) {
         }
         
     }
-    /********************************************/
+    ********************************************/
 
-    // Check nonces
     var nj;
     component lt[n];
     for (nj=0; nj<n; nj++){

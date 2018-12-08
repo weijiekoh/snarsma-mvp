@@ -1,4 +1,5 @@
 setup/*.json
+circuits/snarsma.json
 circuits/*.json
 node_modules/
 npm-debug.log*
