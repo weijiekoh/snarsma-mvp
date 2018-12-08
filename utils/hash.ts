@@ -1,7 +1,13 @@
 import * as crypto from 'crypto' 
 import * as bigInt from 'big-integer'
 
-const hashBuf = (buf: Buffer): bigInt.BigInteger => {
+const pedersen = require('../../circomlib/src/pedersenHash.js')
+
+const pedersenHash = (data: Buffer): Buffer => {
+  return pedersen.hash(data)
+}
+
+const sha256 = (buf: Buffer): bigInt.BigInteger => {
   const hash = crypto.createHash("sha256").update(buf).digest("hex")
   const r = hash.slice(10);
 
@@ -36,4 +42,4 @@ const numToBuf = (num: bigInt.BigInteger, length: number): Buffer => {
   return buf
 }
 
-export {hashBuf, numToBuf}
+export {sha256, numToBuf, pedersenHash}
