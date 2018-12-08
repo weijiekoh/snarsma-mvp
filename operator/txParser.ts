@@ -35,7 +35,7 @@ function parseTx(path){
         nonce: nonce
     }
 
-    let msg = generateTx.hashTx(transaction)
+    let msg = generateTx.combineTx(transaction)
 
     return [transaction, msg,sig,A]
 }
