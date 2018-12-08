@@ -1,22 +1,60 @@
 import * as generateTx from './generateTx';
 import * as bigInt from 'big-integer'
+import * as ethKeys from '../user/hardcodedKeys'
 
-const fromPrivKey = '0000000000000000000000000000000000000000000000000000000000000001';
-const fromA = generateTx.A(fromPrivKey)
-const fromPubKey = generateTx.pubKey(fromA)
+// Cast of 10 characters
 
-const toPrivKey = '0000000000000000000000000000000000000000000000000000000000000002';
-const toA = generateTx.A(toPrivKey)
-const toPubKey = generateTx.pubKey(toA)
+let keys = ethKeys.ethKeys;
 
-// tx to send eth from
-let unsignedTx: generateTx.ITransaction = {
-    from: fromPubKey,
-    to: toPubKey,
+const alicePrivKey = keys[0]['priv'];
+const bobPrivKey = keys[1]['priv'];
+const charliePrivKey = keys[2]['priv'];
+const davePrivKey = keys[3]['priv'];
+const evePrivKey = keys[4]['priv'];
+const frankPrivKey = keys[5]['priv'];
+const gracePrivKey = keys[6]['priv'];
+const heidiPrivKey = keys[7]['priv'];
+const judyPrivKey = keys[8]['priv'];
+const malloryPrivKey = keys[9]['priv'];
+
+const aliceA = generateTx.A(alicePrivKey)
+const alicePubKey = generateTx.pubKey(aliceA)
+
+const bobA = generateTx.A(bobPrivKey)
+const bobPubKey = generateTx.pubKey(bobA)
+
+const charlieA = generateTx.A(charliePrivKey)
+const charliePubKey = generateTx.pubKey(charlieA)
+
+const daveA = generateTx.A(davePrivKey)
+const davePubKey = generateTx.pubKey(daveA)
+
+const eveA = generateTx.A(evePrivKey)
+const evePubKey = generateTx.pubKey(eveA)
+
+const frankA = generateTx.A(frankPrivKey)
+const frankPubKey = generateTx.pubKey(frankA)
+
+const graceA = generateTx.A(gracePrivKey)
+const gracePubKey = generateTx.pubKey(graceA)
+
+const heidiA = generateTx.A(heidiPrivKey)
+const heidiPubKey = generateTx.pubKey(heidiA)
+
+const judyA = generateTx.A(judyPrivKey)
+const judyPubKey = generateTx.pubKey(judyA)
+
+const malloryA = generateTx.A(malloryPrivKey)
+const malloryPubKey = generateTx.pubKey(malloryA)
+
+// Alice to Bob
+let tx1: generateTx.ITransaction = {
+    from: alicePubKey,
+    to: bobPubKey,
     amount: bigInt(10),
-    nonce: bigInt(4)
+    nonce: bigInt(1)
 }
 
-const sig = generateTx.signTx(unsignedTx, fromPrivKey)
+const sig1 = generateTx.signTx(tx1, alicePrivKey)
 
-generateTx.makeJson(unsignedTx,sig,fromA,'tx0')
+generateTx.makeJson(tx1,sig1,aliceA,'tx1')
