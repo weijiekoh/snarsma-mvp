@@ -54,24 +54,25 @@ describe('Transaction verification', () => {
       const sBits1 = sBits
 
       const input = {
-        'A[0]': aBits,
-        'R8[0]': r8Bits,
-        'S[0]': sBits,
-        'msg[0]': msgBits,
-        'nonce[0]': '0',
+        'txSigA[0]': aBits,
+        'txSigR8[0]': r8Bits,
+        'txSigS[0]': sBits,
+        'txMsg[0]': msgBits,
+        'txNonce[0]': '0',
 
-        'A[1]': aBits,
-        'R8[1]': r8Bits,
-        'S[1]': sBits,
-        'msg[1]': msgBits,
-        'nonce[1]': '1',
+        'txSigA[1]': aBits,
+        'txSigR8[1]': r8Bits,
+        'txSigS[1]': sBits,
+        'txMsg[1]': msgBits,
+        'txNonce[1]': '1',
 
-        'A[2]': aBits,
-        'R8[2]': r8Bits,
-        'S[2]': sBits,
-        'msg[2]': msgBits,
-        'nonce[2]': '2',
+        'txSigA[2]': aBits,
+        'txSigR8[2]': r8Bits,
+        'txSigS[2]': sBits,
+        'txMsg[2]': msgBits,
+        'txNonce[2]': '2',
       }
+
       const w = circuit.calculateWitness(input)
 
       expect(circuit.checkWitness(w)).toBeTruthy()
