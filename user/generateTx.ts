@@ -1,5 +1,5 @@
-import {hashBuf, numToBuf} from '../utils/hash'
 import * as bigInt from 'big-integer'
+import {numToBuf} from '../utils/hash'
 const eddsa = require('../../circomlib/src/eddsa')
 const babyJub = require('../../circomlib/src/babyjub')
 var fs = require("fs");
@@ -16,7 +16,7 @@ interface ISignature {
   S: bigInt.BigInteger
 }
 
-const combineTx = (tx: any): Buffer => {
+const txToBuf = (tx: any): Buffer => {
   // Output should be 2 + 4 + 32 + 32 = 70 bytes long
   ////// get the first 24 bytes of each pubkey
   //const fromPubKeyForHash = tx.from.slice(0, 24)
@@ -58,13 +58,13 @@ const combineTx = (tx: any): Buffer => {
 }
 
 const signTx = (unsignedTx: ITransaction, privKey: string): ISignature => {
-  const tx = combineTx(unsignedTx)
+  const tx = txToBuf(unsignedTx)
   const sig = eddsa.sign(privKey, tx)
   return sig
 }
 
 const verifyTx = (tx: any, signature: ISignature, pubkeyA: any) => {
-  const msg = combineTx(tx)
+  const msg = txToBuf(tx)
   return eddsa.verify(msg, signature, pubkeyA)
 }
 
@@ -106,4 +106,4 @@ function makeJson(_unsignedTx, _sig, _A, fileName){
   });
 }
 
-export {combineTx, verifyTx, signTx, ITransaction, makeJson, A, pubKey}
+export {txToBuf, verifyTx, signTx, ITransaction, makeJson, A, pubKey}
