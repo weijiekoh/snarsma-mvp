@@ -17,7 +17,6 @@ export const insertSingleTransaction = async (transaction) => {
     try {
         // connect to db
         let db = await DbClient.connect();
-        await db.collection("transaction").deleteMany({});
          await db.collection("transaction").insertOne(transaction);
     } catch (error) {
         console.log(error);
