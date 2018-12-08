@@ -24,5 +24,8 @@
     "npm": "^6.4.1",
     "snarkjs": "^0.1.7",
     "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.10"
   }
 }
