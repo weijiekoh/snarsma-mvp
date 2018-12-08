@@ -1,41 +1,50 @@
 //npm i merkletreejs
+import {hashBuf, numToBuf} from '../utils/hash'
+import * as bigInt from 'big-integer'
 
 const MerkleTree = require('merkletreejs');
-const cryptoJs = require('crypto');
+// const cryptoJs = require('crypto');
 
 // lhs of a Leaf is eddsa address
 // rhs of a Leaf is nonce and balance
-type Leaf = {lhs: string, rhs: string};
 
-// array of leaves
-let leafArray: Leaf[] = [];
-
-function sha256(data) {
-    // returns Buffer
-    return cryptoJs.createHash('sha256').update(data).digest()
+interface ILeaf {
+    pubKey: Buffer,
+    balance: bigInt.BigInteger,
+    nonce: bigInt.BigInteger,
 }
 
-//dummy leaf data
-//TODO: read transaction from database
-//TODO: use merkleTreeHelper to convert transaction to updated leaf
-const lhs1 = "0xSomeAddress1"
-const rhs1 = "0,0"
+//hash leaf for leaf lookup
+function leafToHash(leaf: ILeaf){
+    // get the first 24 bytes of leaf pubkey
+    const pubKeyForHash = leaf.pubKey.slice(0, 24)
 
-const lhs2 = "0xSomeAddress2"
-const rhs2 = "0,0"
-
-//push new leaf onto leafArray
-leafArray.push({lhs:lhs1,rhs:rhs1});
-leafArray.push({lhs:lhs2,rhs:rhs2});
-
-//hash leafArray
-let leafArrayToHash = [];
-for (let i in leafArray){
-    leafArrayToHash.push(leafArray[i]['lhs']+leafArray[i]['rhs']);
+    //Nonce is 4 bytes
+    const nonceBytes = numToBuf(bigInt(leaf.nonce), 4)
+    
+    //Amount is 2 bytes
+    const balanceBytes = numToBuf(bigInt(leaf.balance), 2)
+    
+    // Concat everything
+    const everything = Buffer.alloc(30)
+    for (let i = 0; i < 2; i++) {
+        everything[29-i] = balanceBytes[2-i]
+    }
+    
+    for (let i = 0; i < 4; i++) {
+        everything[27-i] = nonceBytes[4-i]
+    }
+    
+    for (let i = 0; i < 24; i++) {
+        everything[23-i] = pubKeyForHash[23-i]
+    }
+    return everything
 }
-const leaves = leafArrayToHash.map(x => sha256(x))
 
-//regenerate Merkle tree with update leafArray 
-const tree = new MerkleTree(leaves, sha256)
 
-console.log(tree)
+function hashLeaf(leafBuffer){
+
+    return numToBuf(hashBuf(leafBuffer), 32)
+}
+
+export {ILeaf, leafToHash, hashLeaf, MerkleTree}

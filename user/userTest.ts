@@ -6,6 +6,7 @@ import * as ethKeys from '../user/hardcodedKeys'
 
 let keys = ethKeys.ethKeys;
 
+const zeroPrivKey = '0x0000000000000000000000000000000000000000000000000000000000000000'
 const alicePrivKey = keys[0]['priv'];
 const bobPrivKey = keys[1]['priv'];
 const charliePrivKey = keys[2]['priv'];
@@ -16,6 +17,9 @@ const gracePrivKey = keys[6]['priv'];
 const heidiPrivKey = keys[7]['priv'];
 const judyPrivKey = keys[8]['priv'];
 const malloryPrivKey = keys[9]['priv'];
+
+const zeroA = generateTx.A(zeroPrivKey)
+const zeroPubKey = generateTx.pubKey(zeroA)
 
 const aliceA = generateTx.A(alicePrivKey)
 const alicePubKey = generateTx.pubKey(aliceA)
@@ -47,7 +51,18 @@ const judyPubKey = generateTx.pubKey(judyA)
 const malloryA = generateTx.A(malloryPrivKey)
 const malloryPubKey = generateTx.pubKey(malloryA)
 
-// Alice to Bob
+// Alice deposit
+let tx0: generateTx.ITransaction = {
+    from: zeroPubKey,
+    to: alicePubKey,
+    amount: bigInt(10),
+    nonce: bigInt(1)
+}
+
+const sig0 = generateTx.signTx(tx0, zeroPrivKey)
+generateTx.makeJson(tx0,sig0,zeroA,'tx0')
+
+// Alice transfer to Bob
 let tx1: generateTx.ITransaction = {
     from: alicePubKey,
     to: bobPubKey,
@@ -56,5 +71,6 @@ let tx1: generateTx.ITransaction = {
 }
 
 const sig1 = generateTx.signTx(tx1, alicePrivKey)
-
 generateTx.makeJson(tx1,sig1,aliceA,'tx1')
+
+
