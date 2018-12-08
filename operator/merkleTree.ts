@@ -15,7 +15,7 @@ interface ILeaf {
 }
 
 //hash leaf for leaf lookup
-function leafToHash(leaf: ILeaf){
+function leafToBuffer(leaf: ILeaf){
     // get the first 24 bytes of leaf pubkey
     const pubKeyForHash = leaf.pubKey.slice(0, 24)
 
@@ -43,8 +43,8 @@ function leafToHash(leaf: ILeaf){
 
 
 function hashLeaf(leafBuffer){
-
+//TODO: Change to Pedersen hash (Zcash)
     return numToBuf(hashBuf(leafBuffer), 32)
 }
 
-export {ILeaf, leafToHash, hashLeaf, MerkleTree}
+export {ILeaf, leafToBuffer, hashLeaf, MerkleTree}
