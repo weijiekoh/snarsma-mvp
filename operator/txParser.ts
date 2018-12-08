@@ -37,7 +37,7 @@ function parseTx(path){
 
     let msg = generateTx.hashTx(transaction)
 
-    return [msg,sig,A]
+    return [transaction, msg,sig,A]
 }
 
 export {parseTx}
