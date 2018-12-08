@@ -1,6 +1,7 @@
 import * as generateTx from './generateTx';
 import * as bigInt from 'big-integer'
 import * as ethKeys from '../user/hardcodedKeys'
+import { TIMEOUT } from 'dns';
 
 // Cast of 10 characters
 
@@ -60,40 +61,55 @@ let tx0: generateTx.ITransaction = {
 }
 
 const sig0 = generateTx.signTx(tx0, zeroPrivKey)
-generateTx.makeJson(tx0,sig0,zeroA,'tx0')
+// generateTx.makeJson(tx0,sig0,zeroA,'tx0')
 
 // Alice transfer to Bob
 let tx1: generateTx.ITransaction = {
     from: alicePubKey,
     to: bobPubKey,
-    amount: bigInt(10),
-    nonce: bigInt(1)
+    amount: bigInt(5),
+    nonce: bigInt(2)
 }
 
 const sig1 = generateTx.signTx(tx1, alicePrivKey)
-generateTx.makeJson(tx1,sig1,aliceA,'tx1')
+// generateTx.makeJson(tx1,sig1,aliceA,'tx1')
 
 
-// Charlie to Bob transfer
-let tx2: generateTx.ITransaction = {
-    from: charliePubKey,
-    to: bobPubKey,
-    amount: bigInt(5),
-    nonce: bigInt(1)
-}
-
-const sig2 = generateTx.signTx(tx2, charliePrivKey)
-generateTx.makeJson(tx2,sig2,charlieA,'tx2')
-
-let tx3: generateTx.ITransaction = {
-    from: bobPubKey,
+// Alice withdraw
+let tx4: generateTx.ITransaction = {
+    from: alicePubKey,
     to: zeroPubKey,
     amount: bigInt(5),
-    nonce: bigInt(1)
+    nonce: bigInt(3)
 }
 
-const sig3 = generateTx.signTx(tx3, bobPrivKey)
-generateTx.makeJson(tx3,sig3,bobA,'tx3')
+const sig4 = generateTx.signTx(tx4, alicePrivKey)
+// generateTx.makeJson(tx4,sig4,aliceA,'tx4')
 
 
+setTimeout(function() {generateTx.makeJson(tx0,sig0,zeroA,'tx0')},1000)
+setTimeout(function() {generateTx.makeJson(tx1,sig1,aliceA,'tx1')},2000)
+setTimeout(function() {generateTx.makeJson(tx4,sig4,aliceA,'tx4')},3000)
+
+// // Charlie to Bob transfer
+// let tx2: generateTx.ITransaction = {
+//     from: charliePubKey,
+//     to: bobPubKey,
+//     amount: bigInt(5),
+//     nonce: bigInt(1)
+// }
+
+// const sig2 = generateTx.signTx(tx2, charliePrivKey)
+// generateTx.makeJson(tx2,sig2,charlieA,'tx2')
+
+// Bob withdraw
+// let tx3: generateTx.ITransaction = {
+//     from: bobPubKey,
+//     to: zeroPubKey,
+//     amount: bigInt(5),
+//     nonce: bigInt(1)
+// }
+
+// const sig3 = generateTx.signTx(tx3, bobPrivKey)
+// generateTx.makeJson(tx3,sig3,bobA,'tx3')
 
