@@ -50,7 +50,8 @@ describe("Sum test", () => {
         assert(witness[0].equals(snarkjs.bigInt(1)));
         assert(witness[1].equals(snarkjs.bigInt(0)));
 
-        witness = circuit.calculateWitness({ "in[0]": "661", "in[1]": "660" });
+        witness = circuit.calculateWitness({ "in[0]": "561", "in[1]": "660" });
+        console.log(witness[circuit.getSignalIdx('main.out')])
         assert(witness[0].equals(snarkjs.bigInt(1)));
         assert(witness[1].equals(snarkjs.bigInt(0)));
 
