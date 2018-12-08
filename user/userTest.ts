@@ -74,3 +74,16 @@ const sig1 = generateTx.signTx(tx1, alicePrivKey)
 generateTx.makeJson(tx1,sig1,aliceA,'tx1')
 
 
+// Charlie to Bob transfer
+let tx2: generateTx.ITransaction = {
+    from: charliePubKey,
+    to: bobPubKey,
+    amount: bigInt(5),
+    nonce: bigInt(1)
+}
+
+const sig2 = generateTx.signTx(tx2, charliePrivKey)
+generateTx.makeJson(tx2,sig2,charlieA,'tx2')
+
+
+

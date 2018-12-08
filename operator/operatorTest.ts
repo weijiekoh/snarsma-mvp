@@ -3,8 +3,10 @@ import * as txProcessor from '../operator/txProcessor'
 import * as bigInt from 'big-integer'
 import {ILeaf, leafToHash, hashLeaf, MerkleTree} from '../operator/merkleTree'
 import {numToBuf, pedersenHash} from '../utils/hash'
+import retrieve from '../store/retrieve';
 
-// initialise empty Merkle tree of depth 24
+
+// initialise empty Merkle tree of depth 24c
 
 let emptyLeaf: ILeaf = {
     pubKey: Buffer.allocUnsafe(32).fill(0),
@@ -21,18 +23,39 @@ const leaves = leafArray.map(x => leafToHash(x))
 const tree = new MerkleTree(leaves, hashLeaf)
 // console.log(tree)
 
-// //Alice deposit
-let tx0Path = '../../user/transactions/tx0.json'
-let tx0Array = txParser.parseTx(tx0Path)
-let tx0 = tx0Array[0]
 
-console.log(txProcessor.verify(tx0Array[1],tx0Array[2],tx0Array[3]))
-if (txProcessor.checkDeposit(tx0)){
+let resPromise = retrieve.retrieveFromDb();
+resPromise.then(response => {
+  for( let tran of response){
+    //   console.log(tran);
+    let tx0Array = txParser.parseTx(tran);
+  
+    let tx0 = tx0Array[0]
+
+
+    console.log(txProcessor.verify(tx0Array[1],tx0Array[2],tx0Array[3]))
+    if (txProcessor.checkDeposit(tx0)){
     const leafIdx:number = txProcessor.updateDeposit(tx0)[0]
     let newLeaf = txProcessor.updateDeposit(tx0)[1]
     leafArray[leafIdx] = newLeaf
     console.log(leafArray[leafIdx])
 }
+  }
+})
+
+
+// //Alice deposit
+// let tx0Path = '../../user/transactions/tx0.json'
+// let tx0Array = txParser.parseTx(tx0Path)
+// let tx0 = tx0Array[0]
+
+// console.log(txProcessor.verify(tx0Array[1],tx0Array[2],tx0Array[3]))
+// if (txProcessor.checkDeposit(tx0)){
+//     const leafIdx:number = txProcessor.updateDeposit(tx0)[0]
+//     let newLeaf = txProcessor.updateDeposit(tx0)[1]
+//     leafArray[leafIdx] = newLeaf
+//     console.log(leafArray[leafIdx])
+// }
 
 // //Alice transfer to Bob
 // let tx1Path = '../../user/transactions/tx1.json'

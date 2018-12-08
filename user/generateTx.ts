@@ -2,6 +2,8 @@ import * as bigInt from 'big-integer'
 import {numToBuf} from '../utils/hash'
 const eddsa = require('../../circomlib/src/eddsa')
 const babyJub = require('../../circomlib/src/babyjub')
+import {insertSingleTransaction, insertMultiTransaction} from '../store/insert';
+import retrieve from '../store/retrieve';
 var fs = require("fs");
 
 interface ITransaction {
@@ -91,7 +93,8 @@ function makeJson(_unsignedTx, _sig, _A, fileName){
       R8: _sig.R8.toString(),
       S: _sig.S.toString()
     },
-    A: _A.toString()
+    A: _A.toString(),
+    status:'UN' 
   }
 
   fs.writeFile(
@@ -104,6 +107,17 @@ function makeJson(_unsignedTx, _sig, _A, fileName){
       }
       console.log("File has been created")
   });
+
+
+  insertSingleTransaction(transaction);
+
+// insertMultiTransaction()transactions;
+
+
+}
+const pollDb = () => {
+  setInterval(retrieve.retrieveFromDb, 10000);
+  
 }
 
 export {txToBuf, verifyTx, signTx, ITransaction, makeJson, A, pubKey}
