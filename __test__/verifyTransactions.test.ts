@@ -30,24 +30,31 @@ describe('Transaction verification', () => {
     test('should calculate witness', () => {
       const circuitDef = require('../../circuits/snarsma.json')
       const circuit = new snarkjs.Circuit(circuitDef)
-      const msg = generateTx.combineTx(unsignedTx)
+      const msg = generateTx.txToBuf(unsignedTx)
+      expect(msg.length).toEqual(70)
+
       const msgBits = buffer2bits(msg);
 
+      expect(msgBits.length).toEqual(70 * 8)
+
+      const pubKey = generateTx.A(fromPrivKey);
+
+      const verified = generateTx.verifyTx(unsignedTx, signature, fromA)
+      expect(verified).toBeTruthy()
+
       const pSignature = eddsa.packSignature(signature);
-      const pPubKey = babyJub.packPoint(generateTx.A(fromPubKey))
 
       const r8Bits = buffer2bits(pSignature.slice(0, 32));
       const sBits = buffer2bits(pSignature.slice(32, 64));
-      const aBits = buffer2bits(pPubKey);
+      const aBits = buffer2bits(babyJub.packPoint(fromA))
 
-      //console.log(circuit.signalNames(1))
       const w = circuit.calculateWitness({
-        A: aBits, 
-        R8: r8Bits, 
-        S: sBits, 
+        A: aBits,
+        R8: r8Bits,
+        S: sBits,
         msg: msgBits
-      });
-
+      })
+      expect(circuit.checkWitness(w)).toBeTruthy()
     })
   })
 })

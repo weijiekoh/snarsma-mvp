@@ -1,4 +1,5 @@
 setup/*.json
+circuits/snarsma.json
 
 # Logs
 logs
