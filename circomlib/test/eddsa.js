@@ -32,7 +32,7 @@ function buffer2bits(buff) {
 describe("EdDSA test", function () {
     let circuit;
 
-    this.timeout(100000);
+    this.timeout(1000000);
 
     before( async () => {
         const cirDef = await compiler(path.join(__dirname, "circuits", "eddsa_test.circom"));
@@ -43,7 +43,9 @@ describe("EdDSA test", function () {
     });
 
     it("Sign a single 10 bytes from 0 to 9", async () => {
-        const msg = Buffer.from("00010203040506070809", "hex");
+        //const msg = Buffer.from("00010203040506070809", "hex");
+
+        const msg = Buffer.alloc(70)
 
 //        const prvKey = eddsa.cratePrvKey();
 

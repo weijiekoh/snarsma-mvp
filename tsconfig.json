@@ -16,7 +16,7 @@
         "outDir": "build"
     },
     "exclude": [
-        "circuits",
+        "circuits/*.circom",
         "build"
     ],
     "include": [

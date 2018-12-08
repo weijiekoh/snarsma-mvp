@@ -1,3 +1,5 @@
+setup/*.json
+
 # Logs
 logs
 *.log

@@ -1,3 +1,3 @@
 include "../../circuits/eddsa.circom";
 
-component main = EdDSAVerifier(80);
+component main = EdDSAVerifier(560);

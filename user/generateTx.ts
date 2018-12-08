@@ -11,42 +11,61 @@ interface ITransaction {
   nonce: bigInt.BigInteger,
 }
 
-const hashTx = (tx: any): Buffer => {
-  // get the first 24 bytes of each pubkey
-  const fromPubKeyForHash = tx.from.slice(0, 24)
-  const toPubKeyForHash = tx.to.slice(0, 24)
+interface ISignature {
+  R8: bigInt.BigInteger[],
+  S: bigInt.BigInteger
+}
 
-  //Nonce is 4 bytes
+const combineTx = (tx: any): Buffer => {
+  // Output should be 2 + 4 + 32 + 32 = 70 bytes long
+  ////// get the first 24 bytes of each pubkey
+  //const fromPubKeyForHash = tx.from.slice(0, 24)
+  //const toPubKeyForHash = tx.to.slice(0, 24)
+
+  // Nonce is 4 bytes
   const nonceBytes = numToBuf(bigInt(tx.nonce), 4)
 
-  //Amount is 2 bytes
+  // Amount is 2 bytes
   const amtBytes = numToBuf(bigInt(tx.amount), 2)
 
   // Concat everything
-  const everything = Buffer.alloc(54)
+  let j = 70 - 1
+  const everything = Buffer.alloc(70)
   for (let i = 0; i < 2; i++) {
-    everything[53-i] = amtBytes[2-i]
+    everything[j-i] = amtBytes[2-i]
   }
+
+  j -= 2
 
   for (let i = 0; i < 4; i++) {
-    everything[51-i] = nonceBytes[4-i]
+    everything[j-i] = nonceBytes[4-i]
   }
 
-  for (let i = 0; i < 24; i++) {
-    everything[47-i] = toPubKeyForHash[23-i]
+  j -= 4
+
+  const addrLen = 32
+  for (let i = 0; i < addrLen; i++) {
+    everything[j-i] = tx.to[addrLen-1-i]
+  }
+  
+  j -= 32
+
+  for (let i = 0; i < addrLen; i++) {
+    everything[j-i] = tx.from[addrLen-1-i]
   }
 
-  for (let i = 0; i < 24; i++) {
-    everything[23-i] = fromPubKeyForHash[23-i]
-  }
-
-  return numToBuf(hashBuf(everything), 32)
+  return everything
 }
 
-const signTx = (unsignedTx: ITransaction, privKey: string): any => {
-  const hashedTx = hashTx(unsignedTx)
-  const sig = eddsa.sign(privKey, hashedTx)
+const signTx = (unsignedTx: ITransaction, privKey: string): ISignature => {
+  const tx = combineTx(unsignedTx)
+  const sig = eddsa.sign(privKey, tx)
   return sig
+}
+
+const verifyTx = (tx: any, signature: ISignature, pubkeyA: any) => {
+  const msg = combineTx(tx)
+  return eddsa.verify(msg, signature, pubkeyA)
 }
 
 // TODO: rename to generateEddsaPubkey
@@ -73,16 +92,18 @@ function makeJson(_unsignedTx, _sig, _A, fileName){
       S: _sig.S.toString()
     },
     A: _A.toString()
-  };
+  }
 
-  fs.writeFile("../../user/transactions/"+fileName+".json", 
-               JSON.stringify(transaction), (err) => {
+  fs.writeFile(
+    "../../user/transactions/" + fileName + ".json",
+    JSON.stringify(transaction),
+    (err) => {
       if (err) {
           console.error(err);
           return;
-      };
-      console.log("File has been created");
+      }
+      console.log("File has been created")
   });
 }
 
-export {hashTx, signTx, ITransaction, makeJson, A, pubKey}
+export {combineTx, verifyTx, signTx, ITransaction, makeJson, A, pubKey}
