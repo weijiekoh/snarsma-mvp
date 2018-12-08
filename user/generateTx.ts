@@ -97,16 +97,16 @@ function makeJson(_unsignedTx, _sig, _A, fileName){
     status:'UN' 
   }
 
-  fs.writeFile(
-    "../../user/transactions/" + fileName + ".json",
-    JSON.stringify(transaction),
-    (err) => {
-      if (err) {
-          console.error(err);
-          return;
-      }
-      console.log("File has been created")
-  });
+  // fs.writeFile(
+  //   "../../user/transactions/" + fileName + ".json",
+  //   JSON.stringify(transaction),
+  //   (err) => {
+  //     if (err) {
+  //         console.error(err);
+  //         return;
+  //     }
+  //     console.log("File has been created")
+  // });
 
 
   insertSingleTransaction(transaction);
