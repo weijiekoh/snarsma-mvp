@@ -1,0 +1,64 @@
+{ oldRoot:
+    '1ce7d9461963a7be8d312bca6017ba5cd7815ac6d7a52e8bdf24720b8f7ceda5',
+   newRoot:
+    '5d2b1e52991d91d640b96f21511f8b8a0e9ae91c10aa41d08d780808e1911217',
+   tx:
+    { _id: 5c0bb5737d71656c181b866c,
+      tx:
+       { from:
+          Binary {
+            _bsontype: 'Binary',
+            sub_type: 0,
+            position: 32,
+            buffer:
+             <Buffer 30 cc b8 4e 0f 2e 9d 1c 50 3b 66 f2 f8 89 f4 2b a4 c2 91 b1 b7 c3 38 f4 13 d8 32 5b 7b ab e0 a3> },
+         to:
+          Binary {
+            _bsontype: 'Binary',
+            sub_type: 0,
+            position: 32,
+            buffer:
+             <Buffer 33 ba ff 97 1e 6f 2c 1d f2 ee d5 da 4e 50 b2 03 c2 c6 ef 4d f1 b2 6e bd 83 75 57 6a 99 54 73 2b> },
+         amount: '10',
+         nonce: '1' },
+      sig:
+       { R8:
+          '10016147089820181906484078712794001268355724991975275861608382664962008317548,13130638325709304070887364732409022455576936595641427644710304381572070504086',
+         S:
+          '2240360195833833265660850124018235845127283114083167026994975100553427413459' },
+      A:
+       '15380925067482091548685745701754946860477167456742188218038427121370886411043,16227906967227757501505361865965935769216438823451740366210470358334851042352',
+      status: 'UN' },
+   leaf:
+    { pubKey:
+       <Buffer 33 ba ff 97 1e 6f 2c 1d f2 ee d5 da 4e 50 b2 03 c2 c6 ef 4d f1 b2 6e bd 83 75 57 6a 99 54 73 2b>,
+      balance: 10n,
+      nonce: Integer { value: 1n } },
+   leafHash:
+    '775e65d5c3bd8f60f300fc391ae11f875398c4c9bb12a4051c205406bce113a7',
+   proof:
+    [ { position: 'left',
+        data:
+         <Buffer 1c e7 d9 46 19 63 a7 be 8d 31 2b ca 60 17 ba 5c d7 81 5a c6 d7 a5 2e 8b df 24 72 0b 8f 7c ed a5> },
+      { position: 'left',
+        data:
+         <Buffer 1c e7 d9 46 19 63 a7 be 8d 31 2b ca 60 17 ba 5c d7 81 5a c6 d7 a5 2e 8b df 24 72 0b 8f 7c ed a5> },
+      { position: 'right',
+        data:
+         <Buffer 1c e7 d9 46 19 63 a7 be 8d 31 2b ca 60 17 ba 5c d7 81 5a c6 d7 a5 2e 8b df 24 72 0b 8f 7c ed a5> },
+      { position: 'right',
+        data:
+         <Buffer 1c e7 d9 46 19 63 a7 be 8d 31 2b ca 60 17 ba 5c d7 81 5a c6 d7 a5 2e 8b df 24 72 0b 8f 7c ed a5> },
+      { position: 'left',
+        data:
+         <Buffer 1c e7 d9 46 19 63 a7 be 8d 31 2b ca 60 17 ba 5c d7 81 5a c6 d7 a5 2e 8b df 24 72 0b 8f 7c ed a5> },
+      { position: 'left',
+        data:
+         <Buffer 1c e7 d9 46 19 63 a7 be 8d 31 2b ca 60 17 ba 5c d7 81 5a c6 d7 a5 2e 8b df 24 72 0b 8f 7c ed a5> },
+      { position: 'right',
+        data:
+         <Buffer 1c e7 d9 46 19 63 a7 be 8d 31 2b ca 60 17 ba 5c d7 81 5a c6 d7 a5 2e 8b df 24 72 0b 8f 7c ed a5> },
+      { position: 'right',
+        data:
+         <Buffer 1c e7 d9 46 19 63 a7 be 8d 31 2b ca 60 17 ba 5c d7 81 5a c6 d7 a5 2e 8b df 24 72 0b 8f 7c ed a5> } ] }
+ 

@@ -42,4 +42,9 @@ const numToBuf = (num: bigInt.BigInteger, length: number): Buffer => {
   return buf
 }
 
-export {sha256, numToBuf, pedersenHash}
+const bufToNum = (buf: Buffer): bigInt.BigInteger => {
+      return bigInt.fromArray(Array.from(buf), 256, false)
+}
+
+
+export {sha256, numToBuf, bufToNum, pedersenHash}
