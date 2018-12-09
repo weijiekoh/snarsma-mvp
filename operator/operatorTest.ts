@@ -2,15 +2,7 @@ import * as txParser from '../operator/txParser'
 import * as txProcessor from '../operator/txProcessor'
 import * as bigInt from 'big-integer'
 import {ILeaf, leafToHash, hash, MerkleTree} from '../operator/merkleTree'
-import {numToBuf, pedersenHash} from '../utils/hash'
 import retrieve from '../store/retrieve';
-import * as generateTx from '../user/generateTx';
-var fs = require("fs");
-const zeroPrivKey = '0x0000000000000000000000000000000000000000000000000000000000000000'
-const zeroA = generateTx.A(zeroPrivKey)
-const zeroPubKey = generateTx.pubKey(zeroA)
-const zeroIndex = txProcessor.getLeafIdx(zeroPubKey)
-const stringifyBigInts = require('snarkjs/src/stringifybigint.js').stringifyBigInts;
 
 // ---------------------------------------------------------------------------
 // initialise empty Merkle tree of depth 3
@@ -24,55 +16,97 @@ let emptyLeaf: ILeaf = {
 // let emptyHash = leafToHash(emptyLeaf)
 // let twoEmptyLeavesHash = hash(Buffer.concat([emptyHash,emptyHash]))
 
+console.log('\ninitialising empty leaves...\n')
 var elements = 2**8;
 var leafArray = Array.apply(null, Array(elements)).map(function () { return emptyLeaf; });
 
-// //hash leaves
-const leaves = leafArray.map(x => leafToHash(x))
+//hash leaves
+console.log('hashing empty leaves...\n')
+var leaves = leafArray.map(x => leafToHash(x))
 
-// //hash leaves and nodes to make Merkle tree
-const tree = new MerkleTree(leaves, hash)
-// console.log(tree.getRoot())
+//hash leaves and nodes to make Merkle tree
+console.log('intialising Merkle tree...\n')
+var tree = new MerkleTree(leaves, hash)
 
 //---------------------------------------------------------------------------
 
 //read transaction(s) from db
 
+let txCount = 0
 let resPromise = retrieve.retrieveFromDb();
 resPromise.then(response => {
   for( let tran of response){
-    // console.log(tran)
+
+    txCount ++;
+
+    let leafIdx = 0;
+
+    console.log('current Merkle root:')
+    console.log(tree.getRoot())
+    console.log('\n')
+
+    console.log('received transaction ', txCount,'\n')
     let txArray = txParser.parseTx(tran);
-    // console.log(txArray)
     let tx = txArray[0]
 
+    //Check if tx is deposit
     if (txProcessor.checkDeposit(tx)){
-      console.log('deposit')
-      // console.log(tx)
-      let newLeafIdx = txProcessor.updateDeposit(tx)[0]
-      // console.log(newLeafIdx)
+      console.log('transaction is deposit')
+      leafIdx = txProcessor.updateDeposit(tx)[0]
       let newLeaf = txProcessor.updateDeposit(tx)[1]
-      // console.log(newLeaf)
-      leafArray[newLeafIdx] = newLeaf
-      console.log(leafArray[newLeafIdx])
-    }
-    else if (txProcessor.checkWithdraw(tx)){
-      console.log('withdraw')
-      let leafIdx = txProcessor.getLeafIdx(tx['from'])
-      let newLeaf = txProcessor.updateWithdraw(tx,leafArray)
+      console.log('transaction is legit \n')
       leafArray[leafIdx] = newLeaf
-      console.log(leafArray[leafIdx])
+      console.log('new toLeaf:', leafArray[leafIdx],'\n')
     }
+
+    //Check if tx is withdraw
+    else if (txProcessor.checkWithdraw(tx)){
+      console.log('transaction is withdraw')
+      leafIdx = txProcessor.getLeafIdx(tx['from'])
+      let newLeaf = txProcessor.updateWithdraw(tx,leafArray)
+      console.log('transaction is legit \n')
+      leafArray[leafIdx] = newLeaf
+      console.log('new fromLeaf:', leafArray[leafIdx],'\n')
+    }
+
+    //Check if tx is transfer
     else{
-      console.log('transfer')
-      let fromLeafIdx = txProcessor.getLeafIdx(tx['from'])
+      console.log('transaction is transfer')
+      leafIdx = txProcessor.getLeafIdx(tx['from'])
       let toLeafIdx = txProcessor.getLeafIdx(tx['to'])
-      let [newFromLeaf, newToLeaf] = txProcessor.updateTransfer(tx, leafArray)
-      leafArray[fromLeafIdx] = newFromLeaf
+      let [newLeaf, newToLeaf] = txProcessor.updateTransfer(tx, leafArray)
+      console.log('transaction is legit \n')
+      leafArray[leafIdx] = newLeaf
       leafArray[toLeafIdx] = newToLeaf
-      console.log(leafArray[fromLeafIdx])
-      console.log(leafArray[toLeafIdx])
+      console.log('new fromLeaf:', leafArray[leafIdx],'\n')
+      console.log('new toLeaf:', leafArray[toLeafIdx],'\n')
     }
+
+    // //hash leaves
+    leaves = leafArray.map(x => leafToHash(x))
+
+    console.log('updating Merkle tree...\n')
+    // //hash leaves and nodes to make Merkle tree
+    tree = new MerkleTree(leaves, hash)
+
+    //Generate new Merkle root
+    console.log('updated Merkle root:')
+    console.log(tree.getRoot())
+    console.log('\n')
+
+    console.log(leaves[0])
+
+    //Provide Merkle Proof of new 'from' leaf
+    let proof = txProcessor.getMerkleProof(leaves[leafIdx], tree)
+    console.log('Merkle proof of transaction ', txCount, '\n\n', proof)
+    console.log('\n')
+
+    //Verify Merkle Proof
+    console.log('verification of new leaf in new Merkle root...')
+    let verify = txProcessor.verifyMerkleProof(proof,leaves[leafIdx],tree)
+    console.log(verify)
+    console.log('\n')
+
   }
 });
 

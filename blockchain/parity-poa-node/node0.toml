@@ -1,0 +1,35 @@
+[parity]
+chain = "demo-spec.json"
+base_path = "./parity0"
+
+[network]
+port = 30300
+
+[rpc]
+port = 8450
+apis = ["web3", "eth", "net", "personal", "parity", "parity_set", "traces", "rpc", "parity_accounts"]
+
+[websockets]
+port = 8452
+interface = "all"
+origins = ["all"]
+apis = ["web3","eth","net","parity", "pubsub", "traces"]
+hosts = ["all"]
+
+[account]
+password = ["node.pwds"]
+unlock = ["0xda01134e308bc964e1b2fb68eb3612c65a930135"]
+
+[footprint]
+# Compute and Store tracing data. (Enables trace_* APIs).
+tracing = "on"
+# Enables Fat DB
+fat_db = "on"
+# Keep all state trie data. No pruning.
+pruning = "archive"
+
+[mining]
+engine_signer = "0xda01134e308bc964e1b2fb68eb3612c65a930135"
+reseal_on_txs = "none"
+reseal_min_period = 0
+force_sealing = true
