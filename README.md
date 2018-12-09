@@ -32,9 +32,11 @@ Set up your database:
 
 Send transactions:
 - from `build/user` run `node userTest.js` to send a deposit, transfer, and withdraw transaction to your database
+
+Process transactions:
 - from `build/operator` run `node operatorTest.js` to pick up these transactions from your database and update your Merkle root accordingly
 
 ### Verifying eddsa signatures in the snark circuit
-Download `jest` (`npm i jest`) if you do not already have it.
-Run `jest Verify` to run a circuit which checks EdDSA-signed transactions.
+- Download `jest` (`npm i jest`) if you do not already have it.
+- Run `jest Verify` to run a circuit which checks EdDSA-signed transactions.
 
